@@ -1,0 +1,6 @@
+来源仓库：https://github.com/crazywhalecc/idiom-database/blob/master/data/idiom.json
+原始数据：https://raw.githubusercontent.com/crazywhalecc/idiom-database/master/data/idiom.json
+许可证：源仓库声明为 MIT；使用前请保留本说明并自行核对上游许可范围。
+生成日期：2026-07-19
+筛选结果：500 条成语，200 道原创语境训练题。
+审核状态：自动二审通过，待人工终审。自动检查不等于人工语义审校。
