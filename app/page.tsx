@@ -92,7 +92,16 @@ export default function Home() {
   const streak = store.sessions.length ? Math.min(30, store.sessions.length + 1) : 0;
   const daysToExam = Math.max(0, Math.ceil((new Date(`${store.targetDate}T00:00:00`).getTime() - Date.now()) / 86400000));
 
-  function showView(nextView: View) { setView(nextView); setMobileNav(false); setSessionResult(null); if (remoteUserId && (nextView === "vocabulary" || nextView === "today")) void refreshRemoteContent(true); }
+  function showView(nextView: View) {
+    setMobileNav(false);
+    setSessionResult(null);
+    if (nextView === "practice") {
+      void beginPractice();
+      return;
+    }
+    setView(nextView);
+    if (remoteUserId && (nextView === "vocabulary" || nextView === "today")) void refreshRemoteContent(true);
+  }
 
   async function refreshRemoteContent(silent = false) {
     if (!remoteUserId || !store.user) { if (!silent) setToast("当前未连接云端账号"); return null; }

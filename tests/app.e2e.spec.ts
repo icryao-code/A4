@@ -22,6 +22,13 @@ test("user can complete a question and see the explanation", async ({ page }) =>
   await expect(page.getByText("回答正确", { exact: true })).toBeVisible();
 });
 
+test("user can start practice from the brush-question navigation", async ({ page }) => {
+  await login(page);
+  await page.getByRole("button", { name: "刷题", exact: true }).click();
+  await expect(page.getByRole("button", { name: "提交答案" })).toBeDisabled();
+  await expect(page.locator(".option-button")).toHaveCount(4);
+});
+
 test("wrong answers enter the mistake queue", async ({ page }) => {
   await login(page);
   await page.getByRole("button", { name: "开始今日训练" }).click();
