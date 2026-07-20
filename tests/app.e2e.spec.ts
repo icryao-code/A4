@@ -2,85 +2,85 @@ import { expect, test } from "@playwright/test";
 
 async function login(page: import("@playwright/test").Page, email = "demo@example.com") {
   await page.goto("/");
-  await page.getByLabel("閭鍦板潃").fill(email);
-  await page.getByLabel("瀵嗙爜").fill("123456");
-  await page.getByRole("button", { name: "杩涘叆瀛︿範绌洪棿" }).click();
-  await expect(page.getByText("浠婃棩浠诲姟", { exact: true })).toBeVisible();
+  await page.getByLabel("邮箱地址").fill(email);
+  await page.getByLabel("密码").fill("123456");
+  await page.getByRole("button", { name: "进入学习空间" }).click();
+  await expect(page.getByText("今日任务", { exact: true })).toBeVisible();
 }
 
 test("user can log in", async ({ page }) => {
   await login(page);
-  await expect(page.getByRole("heading", { name: "鏃╀笂濂斤紝demo" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "早上好，demo" })).toBeVisible();
 });
 
 test("user can complete a question and see the explanation", async ({ page }) => {
   await login(page);
-  await page.getByRole("button", { name: "寮€濮嬩粖鏃ヨ缁? }).click();
-  await expect(page.getByRole("button", { name: "鎻愪氦绛旀" })).toBeDisabled();
+  await page.getByRole("button", { name: "开始今日训练" }).click();
+  await expect(page.getByRole("button", { name: "提交答案" })).toBeDisabled();
   await page.locator(".option-button").first().click();
-  await page.getByRole("button", { name: "鎻愪氦绛旀" }).click();
-  await expect(page.getByText("鍥炵瓟姝ｇ‘", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "提交答案" }).click();
+  await expect(page.getByText("回答正确", { exact: true })).toBeVisible();
 });
 
 test("user can start practice from the brush-question navigation", async ({ page }) => {
   await login(page);
-  await page.getByRole("button", { name: "鍒烽", exact: true }).click();
-  await expect(page.getByRole("button", { name: "鎻愪氦绛旀" })).toBeDisabled();
+  await page.getByRole("button", { name: "刷题", exact: true }).click();
+  await expect(page.getByRole("button", { name: "提交答案" })).toBeDisabled();
   await expect(page.locator(".option-button")).toHaveCount(4);
 });
 
 test("wrong answers enter the mistake queue", async ({ page }) => {
   await login(page);
-  await page.getByRole("button", { name: "寮€濮嬩粖鏃ヨ缁? }).click();
+  await page.getByRole("button", { name: "开始今日训练" }).click();
   await page.locator(".option-button").nth(1).click();
-  await page.getByRole("button", { name: "鎻愪氦绛旀" }).click();
-  await expect(page.getByText("姝ｇ‘绛旀锛欰", { exact: false })).toBeVisible();
-  await page.getByRole("button", { name: "鐭ヨ瘑鐐逛笉浼? }).click();
-  await page.getByRole("button", { name: "閫€鍑鸿缁? }).click();
-  await page.getByRole("button", { name: "閿欓 1", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "閿欓澶嶄範" })).toBeVisible();
-  await expect(page.getByText("鐭ヨ瘑鐐逛笉浼?, { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "提交答案" }).click();
+  await expect(page.getByText("正确答案：A", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "知识点不会" }).click();
+  await page.getByRole("button", { name: "退出训练" }).click();
+  await page.getByRole("button", { name: "错题 1", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "错题复习" })).toBeVisible();
+  await expect(page.getByText("知识点不会", { exact: true })).toBeVisible();
 });
 
 test("admin can open the question desk and save a question", async ({ page }) => {
   await login(page, "admin@example.com");
-  await page.getByRole("button", { name: "棰樺簱鍚庡彴" }).click();
-  await expect(page.getByRole("heading", { name: "棰樺簱鍚庡彴" })).toBeVisible();
-  await page.getByRole("button", { name: "鏂板棰樼洰" }).click();
-  await page.getByLabel("棰樺共").fill("鑷姩鍖栨祴璇曢锛氬仛浜嬮渶瑕佹湁鏉＄悊锛屼笉鑳絖_____銆?);
-  await page.getByLabel("閫夐」 A").fill("A. 涔变竷鍏碂");
-  await page.getByLabel("閫夐」 B").fill("B. 鏈夋潯涓嶇磰");
-  await page.getByLabel("閫夐」 C").fill("C. 闅忔尝閫愭祦");
-  await page.getByLabel("閫夐」 D").fill("D. 涓€鐭ュ崐瑙?);
-  await page.getByLabel("瑙ｆ瀽").fill("鑷姩鍖栨祴璇曡В鏋愩€?);
-  await page.getByLabel("鏉ユ簮", { exact: true }).fill("鑷姩鍖栨祴璇?);
-  await page.getByLabel("鏉ユ簮璇存槑").fill("鏈湴娴嬭瘯鏁版嵁");
-  await page.getByRole("button", { name: "淇濆瓨棰樼洰" }).click();
-  await expect(page.getByText("鑷姩鍖栨祴璇曢锛氬仛浜嬮渶瑕佹湁鏉＄悊锛屼笉鑳絖_____銆?, { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "题库后台" }).click();
+  await expect(page.getByRole("heading", { name: "题库后台" })).toBeVisible();
+  await page.getByRole("button", { name: "新增题目" }).click();
+  await page.getByLabel("题干").fill("自动化测试题：做事需要有条理，不能______。");
+  await page.getByLabel("选项 A").fill("A. 乱七八糟");
+  await page.getByLabel("选项 B").fill("B. 有条不紊");
+  await page.getByLabel("选项 C").fill("C. 随波逐流");
+  await page.getByLabel("选项 D").fill("D. 一知半解");
+  await page.getByLabel("解析").fill("自动化测试解析。");
+  await page.getByLabel("来源", { exact: true }).fill("自动化测试");
+  await page.getByLabel("来源说明").fill("本地测试数据");
+  await page.getByRole("button", { name: "保存题目" }).click();
+  await expect(page.getByText("自动化测试题：做事需要有条理，不能______。", { exact: true })).toBeVisible();
 });
 
 test("admin can add an idiom", async ({ page }) => {
   await login(page, "admin@example.com");
-  await page.getByRole("button", { name: "棰樺簱鍚庡彴" }).click();
-  await page.getByRole("tab", { name: /鎴愯绠＄悊/ }).click();
-  await page.getByRole("button", { name: "鏂板鎴愯" }).click();
-  await page.getByLabel("鎴愯", { exact: true }).fill("鑷姩鍖栨柊澧炴垚璇?);
-  await page.getByLabel("鎷奸煶").fill("z矛 d貌ng hu脿 x墨n z膿ng");
-  await page.getByLabel("閲婁箟").fill("鐢ㄤ簬楠岃瘉鍚庡彴鑳藉鏂板鎴愯璇嶆潯銆?);
-  await page.getByLabel("渚嬪彞").fill("杩欐槸鑷姩鍖栨祴璇曠敤渚嬩腑鐨勬柊澧炴垚璇€?);
-  await page.getByLabel("鍒嗙被", { exact: true }).fill("娴嬭瘯鏁版嵁");
-  await page.getByLabel("鏉ユ簮璇存槑").fill("绔埌绔祴璇曟暟鎹?);
-  await page.getByRole("button", { name: "淇濆瓨鎴愯" }).click();
-  await expect(page.getByText("鑷姩鍖栨柊澧炴垚璇?, { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "题库后台" }).click();
+  await page.getByRole("tab", { name: /成语管理/ }).click();
+  await page.getByRole("button", { name: "新增成语" }).click();
+  await page.getByLabel("成语", { exact: true }).fill("自动化新增成语");
+  await page.getByLabel("拼音").fill("zì dòng huà xīn zēng");
+  await page.getByLabel("释义").fill("用于验证后台能够新增成语词条。");
+  await page.getByLabel("例句").fill("这是自动化测试用例中的新增成语。");
+  await page.getByLabel("分类", { exact: true }).fill("测试数据");
+  await page.getByLabel("来源说明").fill("端到端测试数据");
+  await page.getByRole("button", { name: "保存成语" }).click();
+  await expect(page.getByText("自动化新增成语", { exact: true })).toBeVisible();
 });
 
 test("admin can batch select questions and idioms", async ({ page }) => {
   await login(page, "admin@example.com");
-  await page.getByRole("button", { name: "棰樺簱鍚庡彴" }).click();
-  await page.getByLabel("鍏ㄩ€夐鐩?).check();
-  await expect(page.getByRole("button", { name: "涓€閿彂甯? })).toBeVisible();
-  await page.getByRole("tab", { name: /鎴愯绠＄悊/ }).click();
-  await page.getByLabel("鍏ㄩ€夋垚璇?).check();
-  await expect(page.getByRole("button", { name: "涓€閿牎瀹? })).toBeVisible();
-  await expect(page.getByRole("button", { name: "鎵归噺鍒犻櫎" })).toBeVisible();
+  await page.getByRole("button", { name: "题库后台" }).click();
+  await page.getByLabel("全选题目").check();
+  await expect(page.getByRole("button", { name: "一键发布" })).toBeVisible();
+  await page.getByRole("tab", { name: /成语管理/ }).click();
+  await page.getByLabel("全选成语").check();
+  await expect(page.getByRole("button", { name: "一键校审" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "批量删除" })).toBeVisible();
 });
